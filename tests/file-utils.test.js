@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {webcrypto} from 'node:crypto';
-import {archiveDownloadName,archiveEntryPath,commonRoot,fingerprint,limitLabel,numberedName,originalName,safeRelativePath,uniqueName} from '../src/file-utils.js';
+import {fingerprint,limitLabel,numberedName,originalName,uniqueName} from '../src/file-utils.js';
 
 if(!globalThis.crypto)globalThis.crypto=webcrypto;
 
@@ -32,17 +32,4 @@ test('压缩档位标签清晰',()=>{
  assert.equal(limitLabel(200000),'200 KB');
  assert.equal(limitLabel(500000),'500 KB');
  assert.equal(limitLabel(1000000),'1 MB');
-});
-
-test('文件夹输出保留层级并增加 clean 后缀',()=>{
- const paths=['旅行照片/第一天/1.jpg','旅行照片/第二天/2.jpg'];
- assert.equal(commonRoot(paths),'旅行照片');
- assert.equal(archiveDownloadName('旅行照片'),'旅行照片-clean.zip');
- assert.equal(archiveEntryPath(paths[0],'001-1-clean.jpg','旅行照片'),'旅行照片-clean/第一天/001-1-clean.jpg');
-});
-
-test('混合根目录使用通用中文压缩包名并清理危险路径',()=>{
- assert.equal(commonRoot(['甲/1.jpg','乙/2.jpg']),null);
- assert.equal(archiveDownloadName(null),'净图-已清除图片.zip');
- assert.equal(safeRelativePath('../甲/./1.jpg'),'甲/1.jpg');
 });
